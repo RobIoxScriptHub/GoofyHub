@@ -1,0 +1,63 @@
+local SoundService = game:GetService("SoundService")
+local CoreGui = game:GetService("CoreGui")
+
+-- 사운드
+local Sound = Instance.new("Sound")
+Sound.SoundId = "rbxassetid://95561748275077"
+Sound.Volume = 1000
+Sound.Looped = true
+Sound.Parent = SoundService
+
+Sound.Loaded:Wait()
+Sound:Play()
+
+-- 기존 GUI 제거
+pcall(function()
+local old = CoreGui:FindFirstChild("FullscreenImageGui")
+if old then
+old:Destroy()
+end
+end)
+
+-- GUI 생성
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "FullscreenImageGui"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.IgnoreGuiInset = true
+ScreenGui.Parent = CoreGui
+
+local ImageLabel = Instance.new("ImageLabel")
+ImageLabel.Name = "Background"
+ImageLabel.Parent = ScreenGui
+ImageLabel.Size = UDim2.fromScale(1, 1)
+ImageLabel.Position = UDim2.fromScale(0, 0)
+ImageLabel.BackgroundTransparency = 1
+ImageLabel.BorderSizePixel = 0
+ImageLabel.ScaleType = Enum.ScaleType.Crop
+
+local images = {
+"rbxassetid://6404704459",
+"rbxassetid://1440961956",
+"rbxassetid://6889590510"
+}
+
+local index = 1
+ImageLabel.Image = images[index]
+
+task.spawn(function()
+while ScreenGui.Parent do
+task.wait(0) -- 5초마다 변경
+
+index += 1  
+    if index > #images then  
+        index = 1  
+    end  
+
+    ImageLabel.Image = images[index]  
+end
+
+end)
+local topbar = game:GetService("CoreGui"):FindFirstChild("TopBarApp")
+if topbar then
+topbar:Destroy()
+end
